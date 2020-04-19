@@ -1,0 +1,33 @@
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.minerGameContainer {
+  padding: 0;
+  margin: 100px auto;
+  width: max-content;
+  &__row {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    width: 25px;
+    height: 25px;
+    background-color: lightblue;
+    background-image: none;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 2px solid gray;
+    border-radius: 5px;
+    line-height: 25px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+
+  }
+}
