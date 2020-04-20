@@ -1,21 +1,28 @@
 
-if (confirm('Do You want to play?')) {
+if (confirm('Бажаєте ризикнути, пане сапере?')) {
+  alert('Відкрити: Left Click; \nВстановити або зняти прапорець: Right Click  \n')
 
   mineGame();
 };
 
 function mineGame() {
+  let winSound = new Audio;
+  let blowSound = new Audio;
+  let clickSound = new Audio;
+  clickSound.src = './sounds/click.mp3';
+  blowSound.src = './sounds/blow.mp3';
+  winSound.src = './sounds/win.mp3';
 
   let startTime = new Date();
   let movesCount = 0;
-  let size = prompt('Size of field (more then 5) ?');
+  let size = prompt(`Оберіть розмір поля? \nНе менше п'яти`);
   if (size < 5) {
     size = 5;
   };
   if (size * 25 > document.defaultView.screen.availWidth) {
     size = Math.floor(document.defaultView.screen.availWidth / 25) - 2;
   };
-  
+
   let container = document.querySelector('.minerGameContainer');
   container.innerHTML = fieldHtmlGenerator(size);
   let gameArr = minesRandomGenerator(size);
@@ -25,6 +32,20 @@ function mineGame() {
     elements.push(...rows[i].children);
   };
   document.addEventListener('click', oneShot);
+  document.addEventListener('contextmenu', flag);
+
+  function flag(event) {
+    event.preventDefault();
+    if (!elements.includes(event.target)) {
+      return;
+    };
+    if(event.target.style.backgroundImage === 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")') {
+      event.target.style.backgroundImage = 'none';
+      return;
+    }
+    
+    event.target.style.backgroundImage = 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")';
+  }
 
   function oneShot(event) {
     if (!elements.includes(event.target)) {
@@ -40,14 +61,16 @@ function mineGame() {
           elements[i].style.backgroundImage = 'url(./imgs/mines_PNG21.png)';
           elements[i].style.backgroundColor = 'white';
         }
-      }
+      };
+      blowSound.play();
       setTimeout(() => {
-        alert('Opps, you exploded :(')
-        if (confirm('One more game?')) {
+        alert('Оце так рвонуло...!!!')
+        if (confirm('Ще раз?')) {
           mineGame();
         }
       }, 1000);
     } else {
+
       event.target.style.backgroundColor = 'white';
       event.target.textContent = gameArr[index];
       switch (gameArr[index]) {
@@ -65,11 +88,13 @@ function mineGame() {
       };
       if (movesCount === size * (size - 1)) {
         let timeInSec = Math.round((new Date() - startTime) / 1000);
-
-        alert(`You win!!! Your time is ${timeInSec} seconds.`);
-        if (confirm('One more game?')) {
-          mineGame();
-        }
+        winSound.play();
+        setTimeout(() => {
+          alert(`Вітаємо!!! Ви розмінували поле.\nВаш час ${timeInSec} секунд.`);
+          if (confirm('Ще раз?')) {
+            mineGame();
+          }
+        }, 1000);
       }
     };
   }
