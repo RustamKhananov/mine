@@ -52,7 +52,7 @@ function mineGame() {
       return;
     };
     let index = elements.indexOf(event.target);
-    movesCount++;
+    
     if (gameArr[index] === 'm') {
       event.target.style.backgroundColor = 'red';
       event.target.style.backgroundImage = 'url(./imgs/hotpng.com.png)';
@@ -64,13 +64,14 @@ function mineGame() {
       };
       blowSound.play();
       setTimeout(() => {
-        alert('Оце так рвонуло...!!!')
+        alert('Оце так вибух...!!!')
         if (confirm('Ще раз?')) {
           mineGame();
         }
       }, 1000);
     } else {
-
+      if(event.target.style.backgroundColor !== 'white') {
+      movesCount++;
       event.target.style.backgroundColor = 'white';
       event.target.textContent = gameArr[index];
       switch (gameArr[index]) {
@@ -86,6 +87,7 @@ function mineGame() {
         default:
           event.target.style.color = 'red';
       };
+    };
       if (movesCount === size * (size - 1)) {
         let timeInSec = Math.round((new Date() - startTime) / 1000);
         winSound.play();
