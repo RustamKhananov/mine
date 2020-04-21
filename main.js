@@ -32,6 +32,8 @@ function mineGame() {
     elements.push(...rows[i].children);
   };
   document.addEventListener('click', oneShot);
+  document.addEventListener('touchstart', oneShot)
+  // document.addEventListener('contextmenu', flag);
   document.addEventListener('contextmenu', flag);
 
   function flag(event) {
