@@ -22,8 +22,8 @@ function mineGame() {
     size = 5;
   };
 
-  let minesCount = size * 2;
-  
+  let minesCount = Math.floor((size ** 2) / 5);
+
   if (size * 25 > document.defaultView.screen.availWidth) {
     size = Math.floor(document.defaultView.screen.availWidth / 25) - 2;
   };
