@@ -15,7 +15,8 @@ function mineGame() {
 
   let startTime = new Date();
   let movesCount = 0;
-  let size = prompt(`Оберіть розмір поля? \nНе менше п'яти`);
+  let minesCount = 0;
+  let size = +prompt(`Оберіть розмір поля? \nНе менше п'яти`);
   if (size < 5) {
     size = 5;
   };
@@ -36,25 +37,31 @@ function mineGame() {
   // document.addEventListener('contextmenu', flag);
   document.addEventListener('contextmenu', flag);
 
-  function flag(event) {
+  function flag(event) { //функция устанавливает или снимает флаг
     event.preventDefault();
     if (!elements.includes(event.target)) {
       return;
     };
-    if(event.target.style.backgroundImage === 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")') {
+    if (event.target.style.backgroundImage === 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")') {
       event.target.style.backgroundImage = 'none';
       return;
+    };
+    if (event.target.textContent !== '') {
+      return;
     }
-    
+
     event.target.style.backgroundImage = 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")';
   }
 
-  function oneShot(event) {
+  function oneShot(event) { //функция открывает одну клетку 
     if (!elements.includes(event.target)) {
       return;
     };
+    if (event.target.style.backgroundImage === 'url("./imgs/neatoshop_achtung-minen_1502460756.large.jpg")') {
+      return;
+    };
     let index = elements.indexOf(event.target);
-    
+
     if (gameArr[index] === 'm') {
       event.target.style.backgroundColor = 'red';
       event.target.style.backgroundImage = 'url(./imgs/hotpng.com.png)';
@@ -72,25 +79,30 @@ function mineGame() {
         }
       }, 1000);
     } else {
-      if(event.target.style.backgroundColor !== 'white') {
-      movesCount++;
-      event.target.style.backgroundColor = 'white';
-      event.target.textContent = gameArr[index];
-      switch (gameArr[index]) {
-        case 0:
-          event.target.style.color = 'blue';
-          break;
-        case 1:
-          event.target.style.color = 'green';
-          break;
-        case 2:
-          event.target.style.color = 'brown';
-          break;
-        default:
-          event.target.style.color = 'red';
+      if (event.target.style.backgroundColor !== 'white') {
+        movesCount++;
+        event.target.style.backgroundColor = 'white';
+        event.target.textContent = gameArr[index];
+        switch (gameArr[index]) {
+          case 0:
+            event.target.style.color = 'white';
+            break;
+          case 1:
+            event.target.style.color = 'green';
+            break;
+          case 2:
+            event.target.style.color = 'brown';
+            break;
+          default:
+            event.target.style.color = 'red';
+        };
       };
-    };
-      if (movesCount === size * (size - 1)) {
+
+      if (event.target.textContent === '0') {
+        openZeros(event.target);
+      }
+
+      if (movesCount === size * (size) - minesCount) {
         let timeInSec = Math.round((new Date() - startTime) / 1000);
         winSound.play();
         setTimeout(() => {
@@ -101,8 +113,204 @@ function mineGame() {
         }, 1000);
       }
     };
+   
   }
+  function openZeros(element) {
+    let i = elements.indexOf(element);
+    if ((i + 1) % size !== 0 && elements[i + 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i + 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i + 1];
+      switch (gameArr[i + 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'red';
+      };
+      if (gameArr[i + 1] === 0) {
+        openZeros(elements[i + 1]);
+      };
+    };
 
+    if (((i - 1) % size !== size - 1) && elements[i - 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i - 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i - 1];
+      switch (gameArr[i - 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'red';
+      };
+      if (gameArr[i - 1] === 0) {
+        openZeros(elements[i - 1]);
+      };
+    };
+
+    if ((i + size) < elements.length && elements[i + size].style.backgroundColor !== 'white' ) {
+      let target = elements[i + size];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i + size];
+      switch (gameArr[i + size]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'red';
+      };
+      if (gameArr[i + size] === 0) {
+        openZeros(elements[i + size]);
+      };
+    };
+    if ((i - size) >= 0 && elements[i - size].style.backgroundColor !== 'white' ) {
+      let target = elements[i - size];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i - size];
+      switch (gameArr[i - size]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'yellow';
+      };
+      if (gameArr[i - size] === 0) {
+        openZeros(elements[i - size]);
+      };
+    };
+
+    if ((i - size - 1) >= 0 
+    && (i - size - 1)%size !== size - 1
+    && elements[i - size - 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i - size - 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i - size - 1];
+      switch (gameArr[i - size - 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'violet';
+      };
+      if (gameArr[i - size - 1] === 0) {
+        openZeros(elements[i - size - 1]);
+      };
+    };
+
+    if ((i + size + 1) < elements.length 
+    && (i + size + 1)%size !== 0
+    && elements[i + size + 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i + size + 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i + size + 1];
+      switch (gameArr[i + size + 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'pink';
+      };
+      if (gameArr[i + size + 1] === 0) {
+        openZeros(elements[i + size + 1]);
+      };
+    };
+
+    if ((i + size - 1) < elements.length
+    && (i + size - 1) % size !== size - 1
+    && elements[i + size - 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i + size - 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i + size - 1];
+      switch (gameArr[i + size - 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'teal';
+      };
+      if (gameArr[i + size - 1] === 0) {
+        openZeros(elements[i + size - 1]);
+      };
+    };
+
+    if ((i - size + 1) > 0
+    && (i - size + 1) % size !== 0
+    && elements[i - size + 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i - size + 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i - size + 1];
+      switch (gameArr[i - size + 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'black';
+      };
+      if (gameArr[i - size + 1] === 0) {
+        openZeros(elements[i - size + 1]);
+      };
+    };
+
+
+
+  }
 
 };
 
@@ -120,7 +328,7 @@ function fieldHtmlGenerator(size) { // функция возвращает ра�
 }
 
 function minesRandomGenerator(size) { // функция возвращает массив с минами и окружающими цифрами
-  let minesCount = size;
+  minesCount = size * 2;
   let mines = [];
   for (let i = 0; i < minesCount; i++) {
     mines.push('m');
@@ -193,4 +401,6 @@ function minesRandomGenerator(size) { // функция возвращает м�
   return result;
 
 }
+
+
 
