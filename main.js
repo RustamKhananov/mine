@@ -307,6 +307,7 @@ function mineGame() {
         openZeros(elements[i - size + 1]);
       };
     };
+    return;
 
 
 
