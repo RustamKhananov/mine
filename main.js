@@ -15,8 +15,9 @@ function mineGame() {
 
   let startTime = new Date();
   let movesCount = 0;
-  let minesCount = 0;
+  
   let size = +prompt(`Оберіть розмір поля? \nНе менше п'яти`);
+  let minesCount = size * 2;
   if (size < 5) {
     size = 5;
   };
@@ -26,7 +27,7 @@ function mineGame() {
 
   let container = document.querySelector('.minerGameContainer');
   container.innerHTML = fieldHtmlGenerator(size);
-  let gameArr = minesRandomGenerator(size);
+  let gameArr = minesRandomGenerator(size, minesCount);
   let rows = [...document.querySelectorAll('.minerGameContainer__row')];
   let elements = [];
   for (let i = 0; i < rows.length; i++) {
@@ -86,6 +87,7 @@ function mineGame() {
         switch (gameArr[index]) {
           case 0:
             event.target.style.color = 'white';
+            openZeros(elements.indexOf(event.target));
             break;
           case 1:
             event.target.style.color = 'green';
@@ -98,9 +100,7 @@ function mineGame() {
         };
       };
 
-      if (event.target.textContent === '0') {
-        openZeros(event.target);
-      }
+    
 
       if (movesCount === size * (size) - minesCount) {
         let timeInSec = Math.round((new Date() - startTime) / 1000);
@@ -115,10 +115,13 @@ function mineGame() {
     };
    
   }
-  function openZeros(element) {
-    let i = elements.indexOf(element);
-    if ((i + 1) % size !== 0 && elements[i + 1].style.backgroundColor !== 'white' ) {
+  function openZeros(i) {
+    
+    if ((i + 1) % size !== 0 
+    && i + 1 < elements.length
+    && elements[i + 1].style.backgroundColor !== 'white' ) {
       let target = elements[i + 1];
+      
       movesCount++;
       target.style.backgroundColor = 'white';
       target.textContent = gameArr[i + 1];
@@ -136,33 +139,11 @@ function mineGame() {
           target.style.color = 'red';
       };
       if (gameArr[i + 1] === 0) {
-        openZeros(elements[i + 1]);
+        openZeros(i + 1);
       };
     };
 
-    if (((i - 1) % size !== size - 1) && elements[i - 1].style.backgroundColor !== 'white' ) {
-      let target = elements[i - 1];
-      movesCount++;
-      target.style.backgroundColor = 'white';
-      target.textContent = gameArr[i - 1];
-      switch (gameArr[i - 1]) {
-        case 0:
-          target.style.color = 'white';
-          break;
-        case 1:
-          target.style.color = 'green';
-          break;
-        case 2:
-          target.style.color = 'brown';
-          break;
-        default:
-          target.style.color = 'red';
-      };
-      if (gameArr[i - 1] === 0) {
-        openZeros(elements[i - 1]);
-      };
-    };
-
+   
     if ((i + size) < elements.length && elements[i + size].style.backgroundColor !== 'white' ) {
       let target = elements[i + size];
       movesCount++;
@@ -182,10 +163,10 @@ function mineGame() {
           target.style.color = 'red';
       };
       if (gameArr[i + size] === 0) {
-        openZeros(elements[i + size]);
+        openZeros(i + size);
       };
     };
-    if ((i - size) >= 0 && elements[i - size].style.backgroundColor !== 'white' ) {
+    if (((i - size) >= 0) && (elements[i - size].style.backgroundColor !== 'white') ) {
       let target = elements[i - size];
       movesCount++;
       target.style.backgroundColor = 'white';
@@ -201,12 +182,38 @@ function mineGame() {
           target.style.color = 'brown';
           break;
         default:
-          target.style.color = 'yellow';
+          target.style.color = 'red';
       };
       if (gameArr[i - size] === 0) {
-        openZeros(elements[i - size]);
+        openZeros(i - size);
       };
     };
+
+    if (((i - 1) % size !== size - 1) 
+    && i - 1 >= 0
+    && elements[i - 1].style.backgroundColor !== 'white' ) {
+      let target = elements[i - 1];
+      movesCount++;
+      target.style.backgroundColor = 'white';
+      target.textContent = gameArr[i - 1];
+      switch (gameArr[i - 1]) {
+        case 0:
+          target.style.color = 'white';
+          break;
+        case 1:
+          target.style.color = 'green';
+          break;
+        case 2:
+          target.style.color = 'brown';
+          break;
+        default:
+          target.style.color = 'red';
+      };
+      if (gameArr[i - 1] === 0) {
+        openZeros(i - 1);
+      };
+    };
+
 
     if ((i - size - 1) >= 0 
     && (i - size - 1)%size !== size - 1
@@ -226,10 +233,10 @@ function mineGame() {
           target.style.color = 'brown';
           break;
         default:
-          target.style.color = 'violet';
+          target.style.color = 'red';
       };
       if (gameArr[i - size - 1] === 0) {
-        openZeros(elements[i - size - 1]);
+        openZeros(i - size - 1);
       };
     };
 
@@ -251,10 +258,10 @@ function mineGame() {
           target.style.color = 'brown';
           break;
         default:
-          target.style.color = 'pink';
+          target.style.color = 'red';
       };
       if (gameArr[i + size + 1] === 0) {
-        openZeros(elements[i + size + 1]);
+        openZeros(i + size + 1);
       };
     };
 
@@ -276,10 +283,10 @@ function mineGame() {
           target.style.color = 'brown';
           break;
         default:
-          target.style.color = 'teal';
+          target.style.color = 'red';
       };
       if (gameArr[i + size - 1] === 0) {
-        openZeros(elements[i + size - 1]);
+        openZeros(i + size - 1);
       };
     };
 
@@ -301,10 +308,10 @@ function mineGame() {
           target.style.color = 'brown';
           break;
         default:
-          target.style.color = 'black';
+          target.style.color = 'red';
       };
       if (gameArr[i - size + 1] === 0) {
-        openZeros(elements[i - size + 1]);
+        openZeros(i - size + 1);
       };
     };
     return;
@@ -328,8 +335,8 @@ function fieldHtmlGenerator(size) { // функция возвращает ра�
   return res2;
 }
 
-function minesRandomGenerator(size) { // функция возвращает массив с минами и окружающими цифрами
-  minesCount = size * 2;
+function minesRandomGenerator(size, minesCount) { // функция возвращает массив с минами и окружающими цифрами
+  
   let mines = [];
   for (let i = 0; i < minesCount; i++) {
     mines.push('m');
