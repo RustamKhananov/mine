@@ -18,7 +18,7 @@ function mineGame() {
   
   let size = +prompt(`Оберіть розмір поля? \nНе менше п'яти`);
   let minesCount = size * 2;
-  if (size < 5) {
+  if (size < 5 || size !== size) {
     size = 5;
   };
   if (size * 25 > document.defaultView.screen.availWidth) {
