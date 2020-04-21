@@ -17,10 +17,11 @@ function mineGame() {
   let movesCount = 0;
   
   let size = +prompt(`Оберіть розмір поля? \nНе менше п'яти`);
-  let minesCount = size * 2;
+  
   if (size < 5 || size !== size) {
     size = 5;
   };
+  let minesCount = size * 2;
   if (size * 25 > document.defaultView.screen.availWidth) {
     size = Math.floor(document.defaultView.screen.availWidth / 25) - 2;
   };
@@ -34,7 +35,7 @@ function mineGame() {
     elements.push(...rows[i].children);
   };
   document.addEventListener('click', oneShot);
-  document.addEventListener('touchstart', oneShot)
+  // document.addEventListener('touchstart', oneShot)
   // document.addEventListener('contextmenu', flag);
   document.addEventListener('contextmenu', flag);
 
